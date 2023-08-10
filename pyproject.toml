@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "podcasts-crawler"
+version = "0.1.0"
+description = "crawler and data transformations for the podcasts project"
+authors = ["David Galevski <davidgalevski@gmail.com>"]
+readme = "README.md"
+packages = [{include = "podcasts_crawler"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+pre-commit = "^3.3.3"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.25.1"
+mypy = "^1.4.1"
+black = "^23.7.0"
+ruff = "^0.0.284"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
