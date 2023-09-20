@@ -4,12 +4,12 @@ version = "0.1.0"
 description = "crawler and data transformations for the podcasts project"
 authors = ["David Galevski <davidgalevski@gmail.com>"]
 readme = "README.md"
-packages = [{include = "podcasts_crawler"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 requests = "^2.31.0"
-pre-commit = "^3.3.3"
+aiohttp = "^3.8.5"
+python-podcastindex = {path = "../python-podcastindex/dist/python_podcastindex-1.11.0-py3-none-any.whl"}
 
 
 [tool.poetry.group.dev.dependencies]
@@ -17,6 +17,11 @@ ipykernel = "^6.25.1"
 mypy = "^1.4.1"
 black = "^23.7.0"
 ruff = "^0.0.284"
+pre-commit = "^3.3.3"
+pandas = "^2.0.3"
+polars = "^0.19.2"
+python-dotenv = "^1.0.0"
+tqdm = "^4.66.1"
 
 [build-system]
 requires = ["poetry-core"]
