@@ -1,16 +1,13 @@
-FROM python:3.10
-
-WORKDIR /app
+FROM apache/airflow:latest-python3.10
 
 COPY pyproject.toml /app/
-COPY poetry.lock /app/
+COPY dist/podcasts_crawler-0.1.0.tar.gz /wheels/
 
-ENV VENV_PATH=/poetry_env
-RUN python3 -m venv $VENV_PATH
-RUN $VENV_PATH/bin/pip install -U pip setuptools
-RUN $VENV_PATH/bin/pip install poetry
 
-RUN pip install "apache-airflow[celery]==2.6.3" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.6.3/constraints-3.10.txt"
+USER root
+RUN apt-get update
+RUN apt-get -y install git
+# change back to base image user
+USER 50000
 
-RUN ${VENV_PATH}/bin/poetry config virtualenvs.create false
-RUN ${VENV_PATH}/bin/poetry install --only main
+RUN pip install /wheels/podcasts_crawler-0.1.0.tar.gz

@@ -1,3 +1,4 @@
+import asyncio
 import os
 
 import podcastindex  # type: ignore
@@ -50,7 +51,7 @@ async def get_new_episodes_known_podcast(
         raise e
 
 
-def get_new_podcasts(last_updated_timestamp: int) -> list:
+def get_new_podcasts(last_updated_timestamp: int | None = None) -> list:
     """Gets new podcasts.
         Returns a list of dicts with new podcasts.
 
@@ -65,9 +66,12 @@ def get_new_podcasts(last_updated_timestamp: int) -> list:
         list: list of dicts with new podcasts
     """
     try:
-        podcasts = index.recentFeeds(since=last_updated_timestamp, max_results=100)
+        podcasts = asyncio.run(
+            index.recentFeeds(since=last_updated_timestamp, max=1000)
+        )
+
         if podcasts.get("count", 0) > 0:
-            formatted_podcasts = podcasts["items"]
+            formatted_podcasts = podcasts["feeds"]
             return formatted_podcasts
         else:
             return []
