@@ -10,6 +10,9 @@ python = "^3.10"
 requests = "^2.31.0"
 aiohttp = "^3.8.5"
 python-podcastindex = {git = "https://github.com/becutandavid/python-podcastindex.git", branch = "async"}
+pydantic = "^2.4.2"
+beautifulsoup4 = "^4.12.2"
+lxml = "^4.9.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -22,7 +25,23 @@ pandas = "^2.0.3"
 polars = "^0.19.2"
 python-dotenv = "^1.0.0"
 tqdm = "^4.66.1"
+types-requests = "^2.31.0.10"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+plugins = [
+  "pydantic.mypy"
+]
+
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = false
+disallow_any_generics = false
+check_untyped_defs = true
+no_implicit_reexport = true
+
+# for strict mypy: (this is the tricky one :-))
+disallow_untyped_defs = true

@@ -21,7 +21,7 @@ assert PODCASTINDEX_API_SECRET != "", "PODCAST_INDEX_API_SECRET not set"
 
 @dag(
     start_date=datetime(2023, 10, 20),
-    schedule_interval="@daily",
+    # schedule_interval="@daily",
     catchup=False,
     tags=["podcasts_crawler"],
 )
@@ -46,6 +46,8 @@ def podcasts_crawler_dag() -> None:
             list: list of Podcast dicts.
         """
         podcasts = podcasts_crawler.extract.get_new_podcasts(latest_crawl_date)
+        if len(podcasts) > 10:
+            podcasts = podcasts[:10]
         return podcasts
 
     @task
@@ -90,8 +92,8 @@ def podcasts_crawler_dag() -> None:
             podcast_model.podcast_id
         )
         logging.info(f"new_episodes: {len(new_episodes)}")
-        if len(new_episodes) > 1:
-            new_episodes = new_episodes[: len(new_episodes) // 3]
+        if len(new_episodes) > 5:
+            new_episodes = new_episodes[:5]
         episodes = EpisodesDict(
             podcast_id=podcast_model.podcast_id, episodes=new_episodes
         )
@@ -126,8 +128,8 @@ def podcasts_crawler_dag() -> None:
     @task_group
     def etl_episodes(transformed_podcast: dict) -> bool:
         episodes = extract_new_episodes(podcast=transformed_podcast)
-        transformed_episodes = transform_episodes(episodes=episodes)
-        return load_episodes_task(episodes=transformed_episodes)
+        transformed_episodes = transform_episodes(episodes)
+        return load_episodes_task(transformed_episodes)
 
     latest_crawl_date = extract_latest_crawl_date()
     extracted_podcasts = extract_podcasts(latest_crawl_date)
