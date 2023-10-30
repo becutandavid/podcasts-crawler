@@ -47,7 +47,6 @@ def transform_episode(episode: dict, podcast_id: int) -> EpisodeModel:
     episode["episode_id"] = episode.pop("id")
     episode["podcast_id"] = podcast_id
 
-
     return EpisodeModel(**episode)
 
 
